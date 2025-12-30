@@ -1,34 +1,47 @@
 extends CharacterBody3D
 
-@export var speed := 7.0
-@export var vertical_speed := 6.0
-@export var turn_speed_deg := 160.0  # how fast it turns
+@export var max_speed := 7.0
+@export var accel := 10.0
+@export var drag := 3.0              # lower = more glide (more “bacteria”)
+
+@export var vertical_max_speed := 5.0
+@export var vertical_accel := 10.0
+@export var vertical_drag := 3.0
+
+@export var turn_speed_deg := 140.0
+@export var turn_smooth := 7.0       # lower = floatier turn, higher = snappier
+
+var turn_input := 0.0
 
 func _physics_process(delta: float) -> void:
-	# Get the active camera
-	var cam := get_viewport().get_camera_3d()
-	if cam == null:
-		return
+	var target_turn := float(Input.is_key_pressed(KEY_D)) - float(Input.is_key_pressed(KEY_A))
+	var throttle := float(Input.is_key_pressed(KEY_W)) - float(Input.is_key_pressed(KEY_S))
+	var updown := float(Input.is_key_pressed(KEY_SPACE)) - float(Input.is_key_pressed(KEY_SHIFT))
 
-	# Inputs
-	var turn := float(Input.is_key_pressed(KEY_D)) - float(Input.is_key_pressed(KEY_A))  # A/D
-	var throttle := float(Input.is_key_pressed(KEY_W)) - float(Input.is_key_pressed(KEY_S))  # W/S
-	var iy := float(Input.is_key_pressed(KEY_SPACE)) - float(Input.is_key_pressed(KEY_SHIFT))  # up/down
+	# Smooth turning (no robotic snap)
+	turn_input = lerp(turn_input, target_turn, 1.0 - exp(-turn_smooth * delta))
+	rotation.y += deg_to_rad(turn_speed_deg) * turn_input * delta
 
-	# --- Turn the bacteria like a car (yaw rotation) ---
-	rotation.y += deg_to_rad(turn_speed_deg) * turn * delta
-
-	# --- Move forward/back in the bacteria's facing direction ---
-	# In Godot, -Z is "forward" for a Node3D
+	# Desired horizontal velocity (in facing direction)
 	var forward := -global_transform.basis.z
 	forward.y = 0
 	forward = forward.normalized()
 
-	var move_dir := forward * throttle
+	var desired_hvel := forward * (throttle * max_speed)
 
-	# Apply velocity
-	velocity.x = move_dir.x * speed
-	velocity.z = move_dir.z * speed
-	velocity.y = iy * vertical_speed
+	# Current horizontal velocity
+	var hvel := Vector3(velocity.x, 0.0, velocity.z)
+
+	# Accelerate / drag
+	var a := accel if abs(throttle) > 0.001 else drag
+	hvel = hvel.lerp(desired_hvel, 1.0 - exp(-a * delta))
+
+	velocity.x = hvel.x
+	velocity.z = hvel.z
+
+	# Vertical floaty motion
+	var desired_v := updown * vertical_max_speed
+	var a_v := vertical_accel if abs(updown) > 0.001 else vertical_drag
+	velocity.y = lerp(velocity.y, desired_v, 1.0 - exp(-a_v * delta))
 
 	move_and_slide()
