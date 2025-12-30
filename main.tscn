@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://wxlqxbmru55d"]
+[gd_scene load_steps=6 format=3 uid="uid://wxlqxbmru55d"]
 
 [ext_resource type="PackedScene" uid="uid://b3n1bfomtljtn" path="res://bacteria.tscn" id="1_ig7tw"]
 
@@ -6,7 +6,21 @@
 
 [sub_resource type="BoxMesh" id="BoxMesh_ig7tw"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ig7tw"]
+cull_mode = 1
+albedo_color = Color(0.41568628, 0.101960786, 0.101960786, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_0xm2m"]
+material = SubResource("StandardMaterial3D_ig7tw")
+top_radius = 12.0
+bottom_radius = 12.0
+height = 200.0
+radial_segments = 32
+rings = 1
+
 [node name="Main" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.806635, 6.9927197, 14.312373)
@@ -26,3 +40,6 @@ mesh = SubResource("BoxMesh_ig7tw")
 
 [node name="Bacteria" parent="." instance=ExtResource("1_ig7tw")]
 transform = Transform3D(0.92488486, -0.38024727, 0, 0.38024727, 0.92488486, 0, 0, 0, 1, 0, 5, 0)
+
+[node name="VesselVisual" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_0xm2m")
