@@ -1,6 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://b3n1bfomtljtn"]
+[gd_scene load_steps=6 format=3 uid="uid://b3n1bfomtljtn"]
 
 [ext_resource type="Script" uid="uid://dmmttpn5goin0" path="res://bacteria.gd" id="1_jncix"]
+[ext_resource type="Script" uid="uid://ba76yysqq87bs" path="res://camera_rig.gd" id="2_teomh"]
+[ext_resource type="Script" uid="uid://npclctpxuur6" path="res://camera_3d.gd" id="3_6bfin"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jncix"]
 
@@ -14,3 +16,10 @@ shape = SubResource("SphereShape3D_jncix")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_teomh")
+
+[node name="CameraRig" type="Node3D" parent="."]
+script = ExtResource("2_teomh")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 14)
+script = ExtResource("3_6bfin")

@@ -1,23 +1,22 @@
 extends CharacterBody3D
 
 @export var speed := 7.0
-@export var vertical_speed := 5.0
+@export var vertical_speed := 6.0
 
 func _physics_process(delta: float) -> void:
-	# Horizontal movement (XZ)
-	var ix := Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-	var iz := Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+	# WASD movement on X/Z
+	var ix := float(Input.is_key_pressed(KEY_D)) - float(Input.is_key_pressed(KEY_A))
+	var iz := float(Input.is_key_pressed(KEY_S)) - float(Input.is_key_pressed(KEY_W))
 
-	# Vertical movement (Y)
-	var iy := 0.0
-	if Input.is_key_pressed(KEY_SPACE):
-		iy += 1.0
-	if Input.is_key_pressed(KEY_SHIFT):
-		iy -= 1.0
+	# Vertical movement on Y
+	var iy := float(Input.is_key_pressed(KEY_SPACE)) - float(Input.is_key_pressed(KEY_SHIFT))
 
-	var direction := Vector3(ix, iy, iz)
-	if direction.length() > 0:
-		direction = direction.normalized()
+	var dir := Vector3(ix, iy, iz)
+	if dir.length() > 0:
+		dir = dir.normalized()
 
-	velocity = direction * speed
+	velocity.x = dir.x * speed
+	velocity.z = dir.z * speed
+	velocity.y = dir.y * vertical_speed
+
 	move_and_slide()
