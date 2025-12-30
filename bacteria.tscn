@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b3n1bfomtljtn"]
+[gd_scene load_steps=9 format=3 uid="uid://b3n1bfomtljtn"]
 
 [ext_resource type="Script" uid="uid://dmmttpn5goin0" path="res://bacteria.gd" id="1_jncix"]
 [ext_resource type="Script" uid="uid://ba76yysqq87bs" path="res://camera_rig.gd" id="2_teomh"]
@@ -8,7 +8,15 @@
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jncix"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lhcfq"]
+albedo_color = Color(0.4117647, 1, 0.28627452, 1)
+roughness = 0.8
+emission_enabled = true
+subsurf_scatter_enabled = true
+subsurf_scatter_strength = 0.6
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_lhcfq"]
+material = SubResource("StandardMaterial3D_lhcfq")
 radius = 0.45
 height = 2.2
 
