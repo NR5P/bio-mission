@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://wxlqxbmru55d"]
+
+[ext_resource type="PackedScene" uid="uid://b3n1bfomtljtn" path="res://bacteria.tscn" id="1_ig7tw"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7dm0k"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ig7tw"]
+
+[node name="Main" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.806635, 6.9927197, 14.312373)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 10, 15)
+
+[node name="floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0)
+shape = SubResource("BoxShape3D_7dm0k")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="floor"]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0)
+mesh = SubResource("BoxMesh_ig7tw")
+
+[node name="Bacteria" parent="." instance=ExtResource("1_ig7tw")]
+transform = Transform3D(0.92488486, -0.38024727, 0, 0.38024727, 0.92488486, 0, 0, 0, 1, 0, 5, 0)
