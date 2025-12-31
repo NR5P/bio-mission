@@ -58,3 +58,17 @@ sides = 32
 [node name="VesselPath" type="Path3D" parent="Vessel"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -319.9357, -7.6313675e-09, -0.17458534)
 curve = SubResource("Curve3D_ig7tw")
+
+[node name="VesselTubeVisual" type="CSGPolygon3D" parent="Vessel"]
+polygon = PackedVector2Array(10, 0, 8.7, 5, 5, 8.7, 0, 10, -5, 8.7, -8.7, 5, -5, -8.7, 0, -10, 5, -8.7, 8.7, -5)
+mode = 2
+path_node = NodePath("../VesselPath")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
