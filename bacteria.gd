@@ -20,16 +20,14 @@ var yaw_deg: float = 0.0
 var pitch_deg: float = 0.0
 
 func _ready() -> void:
-	# Start from current orientation (so it doesn't snap)
 	yaw_deg = rotation_degrees.y
 	pitch_deg = rotation_degrees.x
-	# IMPORTANT: keep roll zero
-	rotation_degrees.z = 0.0
+	rotation_degrees.z = 0.0  # keep roll zero
 
 func _physics_process(delta: float) -> void:
 	# Inputs
 	var yaw_target: float = float(Input.is_key_pressed(KEY_D)) - float(Input.is_key_pressed(KEY_A))
-	# UP = nose down, DOWN = nose up (your request)
+	# UP = nose down, DOWN = nose up
 	var pitch_target: float = float(Input.is_key_pressed(KEY_DOWN)) - float(Input.is_key_pressed(KEY_UP))
 	var throttle: float = float(Input.is_key_pressed(KEY_W)) - float(Input.is_key_pressed(KEY_S))
 	var updown: float = float(Input.is_key_pressed(KEY_SPACE)) - float(Input.is_key_pressed(KEY_SHIFT))
@@ -38,7 +36,7 @@ func _physics_process(delta: float) -> void:
 	yaw_in = lerp(yaw_in, yaw_target, 1.0 - exp(-turn_smooth * delta))
 	pitch_in = lerp(pitch_in, pitch_target, 1.0 - exp(-turn_smooth * delta))
 
-	# Integrate yaw/pitch ourselves (no Euler weirdness)
+	# Integrate yaw/pitch ourselves (stable)
 	yaw_deg += yaw_speed_deg * yaw_in * delta
 	pitch_deg += pitch_speed_deg * pitch_in * delta
 	pitch_deg = clamp(pitch_deg, -pitch_limit_deg, pitch_limit_deg)
@@ -46,7 +44,6 @@ func _physics_process(delta: float) -> void:
 	# Build basis from yaw then pitch (roll forced to 0)
 	var yaw_rad: float = deg_to_rad(yaw_deg)
 	var pitch_rad: float = deg_to_rad(pitch_deg)
-
 	var b := Basis(Vector3.UP, yaw_rad) * Basis(Vector3.RIGHT, pitch_rad)
 
 	# Apply to this body
@@ -54,18 +51,16 @@ func _physics_process(delta: float) -> void:
 	gt.basis = b
 	global_transform = gt
 
-	# Forward in the direction you're pointing
+	# --- Movement ---
+	# Full 3D forward movement (pitch affects travel direction)
 	var forward: Vector3 = -global_transform.basis.z
-	var desired_h: Vector3 = forward * (throttle * max_speed)
+	var desired_vel: Vector3 = forward * (throttle * max_speed)
 
-	# Horizontal smoothing
-	var a_h: float = accel if abs(throttle) > 0.001 else drag
-	var hvel := Vector3(velocity.x, 0.0, velocity.z)
-	hvel = hvel.lerp(Vector3(desired_h.x, 0.0, desired_h.z), 1.0 - exp(-a_h * delta))
-	velocity.x = hvel.x
-	velocity.z = hvel.z
+	# Smooth toward desired forward velocity
+	var a_move: float = accel if abs(throttle) > 0.001 else drag
+	velocity = velocity.lerp(desired_vel, 1.0 - exp(-a_move * delta))
 
-	# Vertical thrust (world up)
+	# Independent vertical thrust (Space/Shift) in world-up
 	var desired_v: float = updown * vertical_max_speed
 	var a_v: float = vertical_accel if abs(updown) > 0.001 else vertical_drag
 	velocity.y = lerp(velocity.y, desired_v, 1.0 - exp(-a_v * delta))
