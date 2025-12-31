@@ -25,7 +25,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.806635, 6.9927197, 14.3123
 transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 10, 15)
 
 [node name="Bacteria" parent="." instance=ExtResource("1_ig7tw")]
-transform = Transform3D(0.92488486, -0.38024727, 0, 0.14779212, 0.35947844, 0.92137545, -0.3503505, -0.8521662, 0.38867372, -0.6902218, 6.7926865, -0.7566331)
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, -0.6902218, 6.7926865, -0.7566331)
 
 [node name="VesselVisual" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0030879974, 0.034828186, 9.5215194e-07)
