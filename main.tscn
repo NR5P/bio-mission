@@ -19,7 +19,7 @@ rings = 1
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.806635, 6.9927197, 14.312373)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.806635, 6.992719, -5.0226846)
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 10, 15)

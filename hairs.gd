@@ -15,11 +15,15 @@ extends Node3D
 @export var hair_roughness: float = 0.9
 @export var hair_specular: float = 0.05
 
+# NEW: emission/glow controls
+@export var hair_emission_color: Color = Color(0.7, 1.0, 0.6, 1.0)
+@export var hair_emission_energy: float = 1.5
+
 # --- Fluid pushback (per-hair, realistic) ---
-@export var max_flow_bend_deg: float = 85.0     # was 45: more dramatic
-@export var flow_strength: float = 1.6          # was 0.8: pushes back more
-@export var assumed_max_speed: float = 10.0     # match bacteria max_speed
-@export var flow_smooth: float = 22.0           # was 12: reacts faster
+@export var max_flow_bend_deg: float = 85.0
+@export var flow_strength: float = 1.6
+@export var assumed_max_speed: float = 10.0
+@export var flow_smooth: float = 22.0
 
 var pivots: Array[Node3D] = []
 var base_basis: Array[Basis] = []
@@ -44,12 +48,16 @@ func _ready() -> void:
 	hair_material.roughness = hair_roughness
 	hair_material.specular = hair_specular
 
+	# NEW: glow/emission
+	hair_material.emission_enabled = true
+	hair_material.emission = hair_emission_color
+	hair_material.emission_energy_multiplier = hair_emission_energy
+
 	_build_hairs()
 
 func _process(delta: float) -> void:
 	t += delta * sway_speed
 
-	# Velocity in THIS node's local space (so math matches base_basis)
 	var vel_self: Vector3 = Vector3.ZERO
 	if bacteria != null:
 		var v_world: Vector3 = bacteria.velocity
@@ -57,39 +65,26 @@ func _process(delta: float) -> void:
 			var inv_self: Basis = global_transform.basis.inverse()
 			vel_self = inv_self * v_world
 
-	# Smooth flow vector to avoid jitter
 	var k: float = 1.0 - exp(-flow_smooth * delta)
 	vel_self_smoothed = vel_self_smoothed.lerp(vel_self, k)
 
-	# Make it kick in sooner at low speeds (more dramatic)
 	var speed01: float = pow(clamp(vel_self_smoothed.length() / assumed_max_speed, 0.0, 1.0), 0.5)
-
-	# Bigger bend
 	var max_bend_rad: float = deg_to_rad(max_flow_bend_deg) * flow_strength * speed01
 
 	for i in range(pivots.size()):
-		# Wiggle (in pivot-local space)
 		var wig_ang: float = float(sin(t + phases[i])) * deg_to_rad(sway_amount_deg)
 		var wiggle: Basis = Basis(sway_axes_local[i], wig_ang)
 
-		# Hair "outward" direction in THIS node's local space
-		# (because base_basis[i] points pivot +Y outward)
 		var normal_self: Vector3 = (base_basis[i] * Vector3.UP).normalized()
 
-		# Tangential flow along the surface at this hair
 		var v: Vector3 = vel_self_smoothed
 		var v_tangent: Vector3 = v - normal_self * v.dot(normal_self)
 
 		var flow_bend: Basis = Basis.IDENTITY
 		if v_tangent.length() > 0.001 and max_bend_rad > 0.0:
-			# We want hairs to stream BACK opposite the tangential flow
 			var back_tangent: Vector3 = (-v_tangent).normalized()
-
-			# Target direction: mostly outward normal, tilted toward back_tangent
-			# (this feels like "pushed back in fluid")
 			var target_self: Vector3 = (normal_self + back_tangent * max_bend_rad).normalized()
 
-			# Rotate normal_self toward target_self in THIS node's space
 			var axis_self: Vector3 = normal_self.cross(target_self)
 			var axis_len: float = axis_self.length()
 			if axis_len > 0.00001:
@@ -98,7 +93,6 @@ func _process(delta: float) -> void:
 				var ang: float = acos(dotv)
 				flow_bend = Basis(axis_self, ang)
 
-		# Apply: flow bend (self space) -> base -> wiggle (pivot local)
 		pivots[i].basis = (flow_bend * base_basis[i]) * wiggle
 
 func _build_hairs() -> void:
@@ -150,7 +144,6 @@ func _build_hairs() -> void:
 
 		pivot.position = pos
 
-		# Orient pivot so local +Y points outward
 		var y_axis: Vector3 = normal
 		var x_axis: Vector3 = Vector3.UP.cross(y_axis)
 		if x_axis.length() < 0.01:
@@ -164,7 +157,6 @@ func _build_hairs() -> void:
 		pivots.append(pivot)
 		base_basis.append(b)
 
-		# Hair mesh
 		var hair: MeshInstance3D = MeshInstance3D.new()
 		var cyl: CylinderMesh = CylinderMesh.new()
 		cyl.top_radius = hair_thickness
@@ -176,7 +168,6 @@ func _build_hairs() -> void:
 		hair.position = Vector3(0.0, hair_length * 0.5, 0.0)
 		pivot.add_child(hair)
 
-		# Wiggle axis perpendicular to local +Y
 		var r: float = rng.randf_range(0.0, TAU)
 		sway_axes_local.append((Vector3.RIGHT * cos(r) + Vector3.FORWARD * sin(r)).normalized())
 		phases.append(rng.randf_range(0.0, TAU))
