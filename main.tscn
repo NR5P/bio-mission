@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://wxlqxbmru55d"]
+[gd_scene load_steps=5 format=3 uid="uid://wxlqxbmru55d"]
 
 [ext_resource type="PackedScene" uid="uid://b3n1bfomtljtn" path="res://bacteria.tscn" id="1_ig7tw"]
 
@@ -14,6 +14,13 @@ bottom_radius = 20.0
 height = 200.0
 radial_segments = 32
 rings = 1
+
+[sub_resource type="Curve3D" id="Curve3D_ig7tw"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 8, 3, -15, 0, 0, 0, -8, -3, -15, 10, 4, -15, 14, 6, -30, 10, -4, 15, -12, -6, -15, -10, 14, -60, 12, 6, 15, 10, -8, -15, -28, 2, -90, -10, 8, 15, 12, 4, -15, -6, -18, -120, -12, -4, 15, 10, 8, -15, 22, -10, -150, -10, -8, 15, -8, 14, -15, 36, 10, -180, 8, -14, 15, -12, -4, -15, 10, 30, -210, 12, 4, 15, -10, -10, -15, -22, 18, -240, 10, 10, 15, 0, 0, 0, -34, -8, -270),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 10
 
 [node name="Main" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
@@ -45,3 +52,9 @@ flip_faces = true
 radius = 20.0
 height = 199.0
 sides = 32
+
+[node name="Vessel" type="Node3D" parent="."]
+
+[node name="VesselPath" type="Path3D" parent="Vessel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -319.9357, -7.6313675e-09, -0.17458534)
+curve = SubResource("Curve3D_ig7tw")
