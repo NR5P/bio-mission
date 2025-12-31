@@ -11,12 +11,12 @@ extends Node3D
 @export var sway_amount_deg: float = 15.0
 
 # Hair color controls
-@export var hair_color: Color = Color(0.85, 0.92, 0.65, 1.0)
+@export var hair_color: Color = Color(0.609, 0.144, 0.0)
 @export var hair_roughness: float = 0.9
 @export var hair_specular: float = 0.05
 
 # NEW: emission/glow controls
-@export var hair_emission_color: Color = Color(0.7, 1.0, 0.6, 1.0)
+@export var hair_emission_color: Color = Color(0.609, 0.144, 0.0)
 @export var hair_emission_energy: float = 1.5
 
 # --- Fluid pushback (per-hair, realistic) ---
