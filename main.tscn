@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://wxlqxbmru55d"]
+[gd_scene load_steps=6 format=3 uid="uid://wxlqxbmru55d"]
 
 [ext_resource type="PackedScene" uid="uid://b3n1bfomtljtn" path="res://bacteria.tscn" id="1_ig7tw"]
 
@@ -21,6 +21,12 @@ _data = {
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 10
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
+albedo_color = Color(0.41960785, 0.11764706, 0.16470589, 1)
+roughness = 0.8
+emission_enabled = true
+emission = Color(0.41960785, 0.11764706, 0.16470589, 1)
 
 [node name="Main" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
@@ -78,6 +84,7 @@ smooth_faces = true
 
 [node name="VesselInner" type="CSGPolygon3D" parent="Vessel/VesselCSG"]
 operation = 2
+flip_faces = true
 polygon = PackedVector2Array(18, 0, 14.58, 10.62, 5.58, 17.1, -5.58, 17.1, -14.58, 10.62, -18, 0, -14.58, -10.62, -5.58, -17.1, 5.58, -17.1, 14.58, -10.62)
 mode = 2
 path_node = NodePath("../../VesselPath")
@@ -91,3 +98,4 @@ path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
 smooth_faces = true
+material = SubResource("StandardMaterial3D_0xm2m")
