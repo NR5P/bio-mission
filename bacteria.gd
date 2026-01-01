@@ -7,7 +7,10 @@ extends CharacterBody3D
 @export var yaw_speed_deg: float = 120.0
 @export var pitch_speed_deg: float = 90.0
 @export var turn_smooth: float = 10.0
-@export var pitch_limit_deg: float = 75.0
+
+# If you want unlimited flips, leave this OFF.
+@export var limit_pitch: bool = false
+@export var pitch_limit_deg: float = 75.0   # only used if limit_pitch = true
 
 @export var vertical_max_speed: float = 6.0
 @export var vertical_accel: float = 10.0
@@ -22,7 +25,7 @@ var pitch_deg: float = 0.0
 func _ready() -> void:
 	yaw_deg = rotation_degrees.y
 	pitch_deg = rotation_degrees.x
-	rotation_degrees.z = 0.0  # keep roll zero
+	rotation_degrees.z = 0.0
 
 func _physics_process(delta: float) -> void:
 	# Inputs
@@ -36,17 +39,21 @@ func _physics_process(delta: float) -> void:
 	yaw_in = lerp(yaw_in, yaw_target, 1.0 - exp(-turn_smooth * delta))
 	pitch_in = lerp(pitch_in, pitch_target, 1.0 - exp(-turn_smooth * delta))
 
-	# Integrate yaw/pitch ourselves (stable)
+	# Integrate yaw/pitch
 	yaw_deg += yaw_speed_deg * yaw_in * delta
 	pitch_deg += pitch_speed_deg * pitch_in * delta
-	pitch_deg = clamp(pitch_deg, -pitch_limit_deg, pitch_limit_deg)
+
+	if limit_pitch:
+		pitch_deg = clamp(pitch_deg, -pitch_limit_deg, pitch_limit_deg)
+	else:
+		# Wrap to keep the number from growing forever (optional but nice)
+		pitch_deg = wrapf(pitch_deg, -180.0, 180.0)
 
 	# Build basis from yaw then pitch (roll forced to 0)
 	var yaw_rad: float = deg_to_rad(yaw_deg)
 	var pitch_rad: float = deg_to_rad(pitch_deg)
-	var b := Basis(Vector3.UP, yaw_rad) * Basis(Vector3.RIGHT, pitch_rad)
+	var b: Basis = Basis(Vector3.UP, yaw_rad) * Basis(Vector3.RIGHT, pitch_rad)
 
-	# Apply to this body
 	var gt := global_transform
 	gt.basis = b
 	global_transform = gt
