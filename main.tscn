@@ -16,12 +16,12 @@ radial_segments = 32
 rings = 1
 
 [sub_resource type="Curve3D" id="Curve3D_ig7tw"]
-bake_interval = 4.95
+bake_interval = 0.1
 _data = {
-"points": PackedVector3Array(-8, -3, -15, 8, 3, -15, 0, 0, 0, -8, -3, -15, 10, 4, -15, 14, 6, -30, 10, -4, 15, -12, -6, -15, -10, 14, -60, 12, 6, 15, 10, -8, -15, -28, 2, -90, -10, 8, 15, 12, 4, -15, -6, -18, -120, -12, -4, 15, 10, 8, -15, 22, -10, -150, -10, -8, 15, -8, 14, -15, 41.407593, -22.69777, -180, 8, -14, 15, -12, -4, -15, 6.3592834, 30, -210, 12, 4, 15, -10, -10, -15, -22, 18, -240, 10, 10, 15, 0, 0, 0, -34, -8, -270),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+"points": PackedVector3Array(-8, -3, -15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.58444214, -73.03851, -64.38002, 0, 0, 0, 0, 0, 0, 13.667664, -94.35886, -116.54764),
+"tilts": PackedFloat32Array(0, 0, 0)
 }
-point_count = 10
+point_count = 3
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h2yge"]
 cull_mode = 2
@@ -78,9 +78,9 @@ polygon = PackedVector2Array(20, 0, 16.2, 11.8, 6.2, 19, -6.2, 19, -16.2, 11.8, 
 mode = 2
 path_node = NodePath("../../VesselPath")
 path_interval_type = 0
-path_interval = 1.0
+path_interval = 0.25
 path_simplify_angle = 0.0
-path_rotation = 2
+path_rotation = 1
 path_rotation_accurate = false
 path_local = false
 path_continuous_u = true
@@ -96,10 +96,10 @@ polygon = PackedVector2Array(18, 0, 14.58, 10.62, 5.58, 17.1, -5.58, 17.1, -14.5
 mode = 2
 path_node = NodePath("../../VesselPath")
 path_interval_type = 0
-path_interval = 1.0
+path_interval = 0.25
 path_simplify_angle = 0.0
-path_rotation = 2
-path_rotation_accurate = false
+path_rotation = 1
+path_rotation_accurate = true
 path_local = false
 path_continuous_u = true
 path_u_distance = 1.0
