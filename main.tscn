@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://wxlqxbmru55d"]
+[gd_scene load_steps=7 format=3 uid="uid://wxlqxbmru55d"]
 
 [ext_resource type="PackedScene" uid="uid://b3n1bfomtljtn" path="res://bacteria.tscn" id="1_ig7tw"]
 
@@ -16,13 +16,19 @@ radial_segments = 32
 rings = 1
 
 [sub_resource type="Curve3D" id="Curve3D_ig7tw"]
+bake_interval = 4.95
 _data = {
 "points": PackedVector3Array(-8, -3, -15, 8, 3, -15, 0, 0, 0, -8, -3, -15, 10, 4, -15, 14, 6, -30, 10, -4, 15, -12, -6, -15, -10, 14, -60, 12, 6, 15, 10, -8, -15, -28, 2, -90, -10, 8, 15, 12, 4, -15, -6, -18, -120, -12, -4, 15, 10, 8, -15, 22, -10, -150, -10, -8, 15, -8, 14, -15, 41.407593, -22.69777, -180, 8, -14, 15, -12, -4, -15, 6.3592834, 30, -210, 12, 4, 15, -10, -10, -15, -22, 18, -240, 10, 10, 15, 0, 0, 0, -34, -8, -270),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 10
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h2yge"]
+cull_mode = 2
+albedo_color = Color(1, 0.16862746, 0.14117648, 1)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
+cull_mode = 2
 albedo_color = Color(0.41960785, 0.11764706, 0.16470589, 1)
 roughness = 0.8
 emission_enabled = true
@@ -32,7 +38,7 @@ emission = Color(0.41960785, 0.11764706, 0.16470589, 1)
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.806635, 6.992719, -5.0226846)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -227.93288, 25.947775, -5.022685)
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 10, 15)
@@ -81,6 +87,7 @@ path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
 smooth_faces = true
+material = SubResource("StandardMaterial3D_h2yge")
 
 [node name="VesselInner" type="CSGPolygon3D" parent="Vessel/VesselCSG"]
 operation = 2
